@@ -1,0 +1,39 @@
+version: '2.1'
+services:
+  develop-elasticsearch:
+    command: ${APM_COMMAND:---strict.perms=false -e -E output.elasticsearch.hosts=["standalone.elk-elasticsearch:9200"]}
+    container_name: ${CONTAINER_HOST_NAME:-standalone.elk}-apm-server
+    #environment:
+    hostname: ${CONTAINER_HOST_NAME:-standalone.elk}-apm-server
+    image: elastic/${IMAGE_ARG_ES_IMAGE_NAME:-apm-server}:${IMAGE_TAG:-7.5.1}
+    labels:
+      deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
+      deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
+      deploy.config.ref: ${LABEL_DEPLOY_CONFIG_REF:-unknown}
+      deploy.util.commit: ${LABEL_DEPLOY_UTIL_COMMIT:-unknown}
+      deploy.util.ref: ${LABEL_DEPLOY_UTIL_REF:-unknown}
+      instance.name.short: ${LABEL_INSTANCE_NAME_SHORT:-standalone.elk-apm-server}
+      instance.name: ${LABEL_INSTANCE_NAME:-127.0.0.1/elk-apm-server/standalone}
+    networks:
+      local-network:
+        ipv4_address: ${IPV4_ADDRESS:-172.16.238.65}
+    ports:
+      - ${EXTERNAL_APM_8200_PORT:-8200}:${APM_8200_PORT:-8200}
+    restart: always
+    user: apm-server
+    volumes:
+      - ${PWD}/apm-server.docker.yml:/usr/share/apm-server/apm-server.yml:ro
+
+networks:
+  local-network:
+    external: true
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - gateway: 172.16.238.1
+        - subnet: 172.16.238.0/24
+        #- subnet: 2001:3984:3989::/64
