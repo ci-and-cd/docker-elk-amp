@@ -189,9 +189,8 @@ apm-server:
     # Specify cache key expiration via this setting. Default is 30 seconds.
     #agent.config.cache.expiration: 30s
 
-    #kibana:
-    # For APM Agent configuration in Kibana, enabled must be true.
-    #enabled: false
+  kibana:
+    enabled: true # For APM Agent configuration in Kibana, enabled must be true.
 
     # Scheme and port can be left out and will be set to the default (`http` and `5601`).
     # In case you specify an additional path, the scheme is required: `http://localhost:5601/path`.
