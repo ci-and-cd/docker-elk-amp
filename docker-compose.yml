@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-  develop-elasticsearch:
+  develop-apm-server:
     command: ${APM_COMMAND:---strict.perms=false -e -E output.elasticsearch.hosts=["standalone.elk-elasticsearch:9200"]}
     container_name: ${CONTAINER_HOST_NAME:-standalone.elk}-apm-server
     #environment:
